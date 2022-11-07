@@ -4,7 +4,12 @@ import { Server, Socket } from 'node:net';
  * A skeleton of the callback function that will call before each incoming TCP request
  * Usually must return `host` & `port`, but if no connections are available it may return `false`
  */
-type SocketOptions = () => { host: string, port: number } | false
+export type SocketOptions = () => { host: string, port: number } | false
+
+/**
+ * A skeleton of the callback function that will call when error appears
+ */
+export type ErrorHandler = (source: string, e: Error) => void;
 
 /**
  * TCP Proxy - Simple & powerful
@@ -19,7 +24,7 @@ type SocketOptions = () => { host: string, port: number } | false
 export function tcpProxy(
   broadcastPort: number,
   socketOptionsFn: SocketOptions,
-  errorHandler: (source: string, e: Error) => void
+  errorHandler: ErrorHandler
 ): Server {
   const proxyServer = new Server((socket) => {
     // Get host & port to connect to

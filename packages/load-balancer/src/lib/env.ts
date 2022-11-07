@@ -6,5 +6,5 @@ export const env = {
   servicePort: Number(process.env.SERVICE_PORT),
   groupPort: Number(process.env.GROUP_PORT),
   groupName: String(process.env.GROUP_NAME),
-  showErrors: process.env.SHOW_ERRORS,
+  showErrors: process.env.SHOW_ERRORS
 };

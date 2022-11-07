@@ -12,6 +12,7 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/database/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/packages/load-balancer/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/.notes" />
     </content>
     <content url="file://$MODULE_DIR$/node_modules" />
     <content url="file://$MODULE_DIR$/packages/database/node_modules" />

@@ -29,7 +29,7 @@ import { Mesh } from './net/mesh';
  * The basic principle is to check if other nodes are alive by providing
  * them with the available list of own nodes at each query аnd at the same time
  * it expects them to return their list of nodes
- * In this way, the network is automatically upgraded
+ * In this way, the network is automatically updated
  */
 (async () => {
   // Init DB & HTTP and combine them
