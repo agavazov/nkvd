@@ -70,9 +70,11 @@ automatically updated.
 
 When there is no centralization and node `1` does not know about the others and trying to connect to `fail node` the
 scenarios will look like this
+
 ![svg](https://raw.githubusercontent.com/agavazov/nkvd/main/docs/assets/mesh-state-1.svg)
 
-But after the the `ping` implementation, things change like this:
+But after the `ping` implementation, things change like this:
+
 ![svg](https://raw.githubusercontent.com/agavazov/nkvd/main/docs/assets/mesh-state-2.svg)
 
 When we run `ping` it pings all nodes in the current mesh network and inform them of the current (my)
