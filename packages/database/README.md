@@ -1,4 +1,4 @@
-# [Database](https://github.com/agavazov/nkvd/packages/database/)
+# [Database](https://github.com/agavazov/nkvd/tree/main/packages/database/)
 
 The database is based on 3 parts: Storage, HTTP Server, Mesh Network. Each of the parts can
 function independently or in this case they can be connected and a centralized service

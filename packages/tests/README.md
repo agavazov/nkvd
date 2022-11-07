@@ -1,4 +1,4 @@
-# [Tests](https://github.com/agavazov/nkvd/packages/tests/)
+# [Tests](https://github.com/agavazov/nkvd/tree/main/packages/tests/)
 
 ### Integration tests
 

@@ -1,4 +1,4 @@
-# [Load Balancer](https://github.com/agavazov/nkvd/packages/load-balancer/)
+# [Load Balancer](https://github.com/agavazov/nkvd/tree/main/packages/load-balancer/)
 
 ## TCP Proxy
 
