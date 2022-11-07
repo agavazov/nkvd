@@ -48,6 +48,12 @@ function loadBalancerStart(connector: DockerConnect) {
   // Road ribbon balancer
   let rri = 0;
   const rriGenerator = () => {
+    // When there is no available containers
+    if (containers.length <= 0) {
+      return false;
+    }
+
+    // Road ribbon containers switch
     rri = ++rri >= containers.length ? 0 : rri;
     const container = containers[rri];
 
@@ -75,12 +81,21 @@ function loadBalancerStart(connector: DockerConnect) {
   });
 
   // Start the TCP server and register
-  tcpProxy(env.servicePort, rriGenerator);
+  let totalErrors = 0;
+  tcpProxy(env.servicePort, rriGenerator, (source, e) => {
+    if (env.showErrors) {
+      console.error(`${source}.error`, e.message);
+    }
+
+    totalErrors++;
+  });
 
   // Show hit report
   let lastReport = '';
   setInterval(() => {
-    const report = '[i] Hits -> ' + containers.map(c => `${c.ip} [${c?.meta?.hits}]`).join(' | ');
+    const report = '[i] Hits -> '
+      + containers.map(c => `${c.ip} [${c?.meta?.hits}]`).join(' | ')
+      + ` | [!] ${totalErrors}`;
     if (lastReport !== report) {
       console.log(report);
       lastReport = report;

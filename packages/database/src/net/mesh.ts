@@ -39,6 +39,8 @@ export class Mesh {
       return;
     }
 
+    params.noReplicate = 'true';
+
     this.nodes.filter(n => !n.isDown).forEach(n => {
       this.request(`http://${n.host}:${n.port}${path}`, params as { [key: string]: string })
         .catch(() => {
@@ -92,7 +94,7 @@ export class Mesh {
       const [host, port] = n.split(/:/g);
 
       return { host, port: Number(port), isDown: false };
-    });
+    }).filter(n => this.isValid(n));
   }
 
   // .
