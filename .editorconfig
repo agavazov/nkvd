@@ -1,0 +1,64 @@
+# http://editorconfig.org
+root = true
+
+[*]
+charset = utf-8 # charset
+indent_style = space # space or tabs
+indent_size = 2 # table space size
+tab_width = 2 # table symbols size
+end_of_line = lf # new line characters
+insert_final_newline = true # add new line at end of the file
+trim_trailing_whitespace = true # trim whitespace
+
+[*.ts]
+ij_typescript_spaces_within_imports = true # space in imports { ... }
+ij_typescript_spaces_within_object_type_braces = true # space in objects { ... }
+ij_typescript_align_multiline_parameters = false # object params well aligned
+ij_typescript_indent_chained_calls = true # chain methods same alignment with parent
+
+ij_typescript_enforce_trailing_comma = remove # remove last comma in arrays, objects and functions
+ij_typescript_force_quote_style = true # force quote style apply
+ij_typescript_force_semicolon_style = true # force semicolon style apply
+ij_typescript_use_double_quotes = false # single quotes
+
+ij_typescript_keep_first_column_comment = false # align comments with the code
+ij_typescript_do_while_brace_force = always # add brackets after do
+ij_typescript_while_brace_force = always # add brackets after while
+ij_typescript_for_brace_force = always # add brackets after for
+ij_typescript_if_brace_force = always # add brackets after if
+
+[*.js]
+ij_javascript_spaces_within_imports = true # space in imports { ... }
+ij_javascript_spaces_within_object_type_braces = true # space in objects { ... }
+ij_javascript_align_multiline_parameters = false # object params well aligned
+ij_javascript_indent_chained_calls = true # chain methods same alignment with parent
+
+ij_javascript_enforce_trailing_comma = remove # remove last comma in arrays, objects and functions
+ij_javascript_force_quote_style = true # force quote style apply
+ij_javascript_force_semicolon_style = true # force semicolon style apply
+ij_javascript_use_double_quotes = false # single quotes
+
+ij_javascript_keep_first_column_comment = false # align comments with the code
+ij_javascript_do_while_brace_force = always # add brackets after do
+ij_javascript_while_brace_force = always # add brackets after while
+ij_javascript_for_brace_force = always # add brackets after for
+ij_javascript_if_brace_force = always # add brackets after if
+
+[*.html]
+ij_html_quote_style = double # double quotes
+ij_html_enforce_quotes = true # enforce to fix the quotes #@todo - not working in JS
+ij_html_keep_whitespaces_inside = pre, textarea # don`t format the tag and keep the content same as it is.... span tag was removed from this list #@todo - not working
+ij_html_attribute_wrap = off # break the attributes on next line if the current line is very long
+ij_html_text_wrap = off # break the text on next line if the current line is very long
+
+[*.css]
+ij_css_use_double_quotes = true # double quotes
+ij_css_enforce_quotes_on_format = true # enforce to fix the quotes
+
+[*.scss]
+ij_scss_use_double_quotes = true # double quotes
+ij_scss_enforce_quotes_on_format = true # enforce to fix the quotes
+
+[*.md]
+insert_final_newline = false # add new line at end of the file
+trim_trailing_whitespace = false # trim whitespace
