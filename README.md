@@ -36,6 +36,8 @@ based on the powerful parallel execution of tasks in JavaScript.
 
 [![gif](/docs/assets/demo.gif)](https://youtu.be/bsdi9aSfBoY)
 
+**[CLICK HERE FOR MORE](https://youtu.be/bsdi9aSfBoY)**
+
 ---
 
 ### How to start
