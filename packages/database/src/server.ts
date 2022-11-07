@@ -4,6 +4,33 @@ import { env } from './lib/env';
 import { Event, HttpServer } from './net/http';
 import { Mesh } from './net/mesh';
 
+/**
+ * 3 services are started here: Database, HTTP server and Mesh Network
+ *
+ * # Database
+ * After we have selected and initialized an adapter for the database,
+ * we need to provide it to the HTTP server and register
+ * request handlers to take care of servicing client requests.
+ * Requests are separated into two types mutable & immutable
+ * - Mutable requests change data in database storage.
+ *   They must be replicated to the other nodes via the mesh network.
+ * - Immutables are executed per node and have no impact on the data
+ *
+ * # HTTP server
+ * The HTTP server is simple, but perfectly covers the goals of the current service.
+ * It is based on events and dynamic registration of handlers.
+ * In this way, we can restore additional services without the
+ * need to interrupt the running services.
+ * Supports only GET requests with query params and returns only JSON response
+ *
+ * # Mesh
+ * Dynamically append service that takes care of finding neighboring
+ * nodes and parallel synchronization between them.
+ * The basic principle is to check if other nodes are alive by providing
+ * them with the available list of own nodes at each query аnd at the same time
+ * it expects them to return their list of nodes
+ * In this way, the network is automatically upgraded
+ */
 (async () => {
   // Init DB & HTTP and combine them
   const db = new MemoryDb();
@@ -61,7 +88,8 @@ import { Mesh } from './net/mesh';
       isDown: false
     }, env.meshNetworkUrl);
 
-    // . return current nodes
+    // Handle the `ping` request by providing the current service
+    // nodes and the other service nodes provided in the URL
     server.handle('/ping', (db, params) => {
       // Check for passed nodes from the others
       mesh.unSerialize(String(params?.nodes))?.forEach((n: any) => mesh.join(n, 'passed'));
@@ -71,7 +99,7 @@ import { Mesh } from './net/mesh';
     });
 
     // When some @mutable command is accessed, we need to replicate the request to the network
-    // . important do it async
+    // The replication is async, so it does not slow down the execution of the main process
     server.on(Event.RequestComplete, ({ path, params, responseData }) => {
       // Skip if the request is not changing anything to the database storage
       if (['/set', '/rm', '/clear'].indexOf(path) === -1) {
@@ -84,7 +112,7 @@ import { Mesh } from './net/mesh';
         return;
       }
 
-      // .
+      // Replicate the request to all nodes in the mesh
       mesh.replicate(path, params)
         .catch(console.error);
     });

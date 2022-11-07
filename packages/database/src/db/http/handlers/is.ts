@@ -1,7 +1,11 @@
 import { NotFoundError, RequestHandler } from '../../../net/http';
 import { validateKey } from '../validators';
 
-// . Is exists ?k=KEY
+/**
+ * Check if the record exists
+ * Params:
+ * * k - Record key
+ */
 export const is: RequestHandler = async (db, params) => {
   // Validate input parameters
   validateKey(params);

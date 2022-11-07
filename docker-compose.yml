@@ -1,7 +1,8 @@
 version: "3.8"
 
+# Some settings are defined in `.env` file
 services:
-  # .
+  # TCP Load Balancer
   proxy:
     build: ./packages/load-balancer
     environment:
@@ -16,13 +17,12 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     working_dir: /app
-    # command: [ "npm", "run", "start" ] # @todo check why 1st connection fails on normal start
-    command: [ "npm", "run", "start:dev" ]
+    command: [ "npm", "run", "start" ]
     restart: unless-stopped
     networks:
       - db-nodes
 
-  # .
+  # KV Database
   database:
     build: ./packages/database
     deploy:
@@ -50,9 +50,7 @@ services:
     depends_on:
       - proxy
 
-  # .
-  # command: ["npm", "run", "test"]
-  # command: ["npm", "run", "stress"]
+  # Tests (stress & interface)
   tests:
     build: ./packages/tests
     environment:

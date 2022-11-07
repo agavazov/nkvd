@@ -1,7 +1,12 @@
 import { NotFoundError, RequestHandler } from '../../../net/http';
 import { validateKey } from '../validators';
 
-// . Remove record ?k=KEY [mutable]
+/**
+ * Remove specific record
+ * mutable: changes the data in the database storage
+ * Params:
+ * * k - Record key
+ */
 export const rm: RequestHandler = async (db, params) => {
   // Validate input parameters
   validateKey(params);

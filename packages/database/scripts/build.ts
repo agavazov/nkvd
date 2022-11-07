@@ -1,9 +1,13 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-// Build config
+// Project directory
 const src = path.join(__dirname, './src');
+
+// Build directory
 const dest = path.join(__dirname, './dist');
+
+// The extensions that will be copied to the build project e.g. ['json', 'proto', 'gql']
 const allowedExt: string[] = [];
 
 /**

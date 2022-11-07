@@ -1,7 +1,13 @@
 import { RequestHandler } from '../../../net/http';
 import { validateKey, validateValue } from '../validators';
 
-// . Set record ?k=KEY&v=VALUE [mutable]
+/**
+ * Set record value
+ * mutable: changes the data in the database storage
+ * Params:
+ * * k - Record key
+ * * v - Record value
+ */
 export const set: RequestHandler = async (db, params) => {
   // Validate input parameters
   validateKey(params);

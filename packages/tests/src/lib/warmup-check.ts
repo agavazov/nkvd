@@ -4,9 +4,9 @@ import { env } from './env';
 // Warmup (unavailable) HTTP status code
 const waitingStatusCode = HttpStatusCode.ServiceUnavailable; // 503
 
-// . check when the service is warmed up
+// Check when the service is warmed up
 export const warmupCheck = async (tries = 15): Promise<boolean> => {
-  // . loop with few tries and sleeps till the service is warmed up
+  // Loop with few tries and sleeps till the service is warmed up
   for (let i = 1; i <= tries; i++) {
     let response;
     let error: AxiosError<any> | undefined;

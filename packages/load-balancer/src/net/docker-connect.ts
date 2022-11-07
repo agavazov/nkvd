@@ -5,6 +5,7 @@ import { parse } from 'node:url';
 
 /**
  * Callback function that will be used when an event is executed
+ * @see Event
  */
 type EventListener = <T>(data: T | any) => void
 
@@ -12,6 +13,7 @@ type EventListener = <T>(data: T | any) => void
  * The structure of the event listeners.
  * Each record must have information about which event it
  * is listening for and the listener function which will be called
+ * @see Event
  */
 type EventRecord = {
   event: Event,
@@ -21,9 +23,9 @@ type EventRecord = {
 /**
  * The events that can occur when communicating with docker
  *  - Connect: When a docker connection is established. This event will only happen once
- *  - Disconnect: @todo
- *  - ContainerConnect: @todo
- *  - ContainerDisconnect:  @todo
+ *  - Disconnect: When there is a problem communicating with the Docker API
+ *  - ContainerConnect: Join only running container, `state` must be `running`
+ *  - ContainerDisconnect: When a container have different `state' than `running'
  */
 export enum Event {
   Connect,
@@ -32,7 +34,11 @@ export enum Event {
   ContainerDisconnect
 }
 
-// Docker container states - https://docs.docker.com/engine/reference/commandline/ps/#filtering
+/**
+ * Docker container states
+ *
+ * @see https://docs.docker.com/engine/reference/commandline/ps/#filtering
+ */
 export enum ContainerState {
   Created = 'created',
   Running = 'running',
@@ -42,7 +48,10 @@ export enum ContainerState {
   Dead = 'dead'
 }
 
-// .
+/**
+ * The structure of the containers.
+ * `meta` property is used for external data appending e.g. how many times the container was used
+ */
 export type Container = {
   id: string,
   group: string,
@@ -51,7 +60,9 @@ export type Container = {
   meta?: { [key: string]: any }
 }
 
-// Response of http://docker/info
+/**
+ * Response of http://docker/info
+ */
 export type DockerResponseInfo = {
   ServerVersion: string,
   ContainersRunning: number,
@@ -60,34 +71,45 @@ export type DockerResponseInfo = {
   [key: string]: any
 }
 
-// When the Docker Linux Socket or API Url is not valid
+/**
+ * When the Docker Linux Socket or API Url is not valid
+ */
 export class ApiLocationError extends Error {
 }
 
-// When the connector is not able to connect to the Docker API
+/**
+ * When the connector is not able to connect to the Docker API
+ */
 export class ConnectionError extends Error {
 }
 
-// When there is a docker request error
+/**
+ * When there is a docker request error
+ */
 export class RequestError extends Error {
 }
 
-// When the response from docker is not valid
+/**
+ * When the response from docker is not valid
+ */
 export class InvalidResponseError extends Error {
 }
 
-// .communicate with docker api via socket or end-point
+/**
+ * Docker observer that trigger events when something happens.
+ * Connects via Linux Socket or http endpoint.
+ */
 export class DockerConnect {
-  // .docker api endpoint host
+  // Docker api endpoint host
   protected apiHost: string | undefined;
 
-  // .docker api endpoint port
+  // Docker api endpoint port
   protected apiPort: number | undefined;
 
   // If the apiUrl is using https we have use different request method
   protected isHttps = false;
 
-  // .socket file
+  // Linux socket location
   protected socketPath: string | undefined;
 
   // Event queue callbacks
@@ -99,10 +121,9 @@ export class DockerConnect {
   // Docker observer can only be started once. Here we will set if this happened
   private isObserverStarted = false;
 
-  // .
+  // List of all working containers (state Running)
   protected containersList: Container[] = [];
 
-  // .http or socket file
   constructor(
     // Connection string (http url or linux socket path)
     apiLocation: string,
@@ -111,12 +132,12 @@ export class DockerConnect {
     // Maximum waiting time for each request to docker
     protected requestTimeoutMs: number = 2000
   ) {
-    // .basic validation
+    // Check if non-empty string information is passed
     if (!apiLocation.length) {
       throw new ApiLocationError('Docker API location can`t be empty');
     }
 
-    // .is url
+    // When url (api endpoint) is provided
     if (/^http:\/\/|^https:\/\//.test(apiLocation)) {
       const urlParse = parse(apiLocation);
 
@@ -129,8 +150,8 @@ export class DockerConnect {
       this.isHttps = urlParse.protocol === 'https:';
       this.apiPort = Number(urlParse.port) || (this.isHttps ? 443 : 80);
     } else {
-      // . If the provided api location is not URL then it must be socket file
-      // . The 1st thing before we continue is to check is this file exists
+      // If the provided api location is not URL then it must be linux socket file
+      // The 1st thing before we continue is to check is this file exists
       if (apiLocation && !existsSync(apiLocation)) {
         throw new ApiLocationError(`Socket file not found [${apiLocation}]`);
       }
@@ -139,7 +160,7 @@ export class DockerConnect {
     }
   }
 
-  // .connect
+  // Connect to the docker api and check the docker service information
   async connect(): Promise<void> {
     const rs = await this.request<DockerResponseInfo>('/info');
     // Check the response
@@ -165,7 +186,7 @@ export class DockerConnect {
     return this.containersList;
   }
 
-  // .on something happen
+  // Events subscriptions
   on(event: Event.Connect, listener: (data: DockerResponseInfo) => void): void;
   on(event: Event.Disconnect, listener: (data: RequestError) => void): void;
   on(event: Event.ContainerConnect, listener: (data: Container) => void): void;
@@ -174,7 +195,7 @@ export class DockerConnect {
     this.eventsQueue.push({ event, listener });
   }
 
-  // .trigger event
+  // Events triggers
   protected emit(event: Event.Connect, data: DockerResponseInfo): void;
   protected emit(event: Event.Disconnect, data: RequestError): void;
   protected emit(event: Event.ContainerConnect, data: Container): void;
@@ -192,11 +213,10 @@ export class DockerConnect {
     });
   }
 
-  // .call docker by http request via socket or api
-  // .expect only JSON response
+  // HTTP Request method which works with linux socket or normal HTTP/S end-points
+  // Expected response is JSON
   async request<T>(path: string): Promise<T> {
     return new Promise<T>((resolve, reject) => {
-      // .
       const options: RequestOptions = {
         socketPath: this.socketPath,
         host: this.apiHost,
@@ -245,8 +265,7 @@ export class DockerConnect {
     });
   }
 
-  // .observe for docker changes
-  // act as separate process
+  // Observe for docker changes which act as separate process
   runDockerObserver(): void {
     // Check is already started
     if (this.isObserverStarted) {
@@ -330,7 +349,7 @@ export class DockerConnect {
     })();
   }
 
-  // . validate & throw, w/o return
+  // Validate the response from the request (usually there is no chance to hit an error)
   protected validateContainerData(item: { [key: string]: any }, hint: string): void {
     // Check parameters & values
     if (typeof item !== 'object' && item) {

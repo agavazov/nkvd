@@ -2,7 +2,13 @@ import { env } from './lib/env';
 import { Container, DockerConnect, Event } from './net/docker-connect';
 import { tcpProxy } from './net/tcp-proxy';
 
-// Create TCP load balancer
+/**
+ * Dynamic TCP Load Balancer that through pull to docker
+ * requests discovers new or disconnected nodes
+ *
+ * This script combines `DockerConnect` and `tcpProxy`
+ * via `Road Ribbon` switching nodes to handle incoming TCP requests
+ */
 {
   // Connect to docker
   const connector = new DockerConnect(env.dockerApiLocation);
@@ -19,8 +25,11 @@ import { tcpProxy } from './net/tcp-proxy';
   loadBalancerStart(connector);
 }
 
-// . simplified function to
-// Docker event handler
+/**
+ * Docker event handler
+ *
+ * In this case is just logger that provides info about the docker containers
+ */
 function dockerEventHandler(connector: DockerConnect) {
   connector.on(Event.Disconnect, (err) => {
     console.error(`[!] Docker connection is lost: ${err.message}`);
@@ -40,9 +49,19 @@ function dockerEventHandler(connector: DockerConnect) {
   });
 }
 
-// . simplified function to
-// Start the load balancer
+/**
+ * TCP Load Balancer
+ *
+ * Once we have access to the docker events, we can
+ * intercept the containers from the required scale group.
+ *
+ * When a new container arrives, it will be checked and if it
+ * matches within the scale group, it will start serving TCP requests
+ *
+ * If any container is not working as expected it will be removed from the service list
+ */
 function loadBalancerStart(connector: DockerConnect) {
+  // The available containers that will serve TCP requests
   let containers: Container[] = [];
 
   // Road ribbon balancer
@@ -64,9 +83,10 @@ function loadBalancerStart(connector: DockerConnect) {
     return { host: container.ip, port: env.groupPort };
   };
 
-  // When new container is joined to the network
+  // Filter callback that checks if it matches the group name
   const filter = (item: Container) => item.group === env.groupName;
 
+  // When new container is joined to the network
   connector.on(Event.ContainerConnect, (container) => {
     // Create metadata to log the load balancer hits
     container.meta = {
@@ -76,11 +96,14 @@ function loadBalancerStart(connector: DockerConnect) {
     containers = connector.containers.filter(filter);
   });
 
+  // Remove disconnected containers file the list
   connector.on(Event.ContainerDisconnect, () => {
     containers = connector.containers.filter(filter);
   });
 
-  // Start the TCP server and register
+  // Start the TCP server and register by providing
+  // `rriGenerator` which will be called after each request.
+  // And provide an error handler, in this case, to log and count the errors .
   let totalErrors = 0;
   tcpProxy(env.servicePort, rriGenerator, (source, e) => {
     if (env.showErrors) {
@@ -90,7 +113,7 @@ function loadBalancerStart(connector: DockerConnect) {
     totalErrors++;
   });
 
-  // Show hit report
+  // Show hit & errors report (displayed only if there is a difference from the last run)
   let lastReport = '';
   setInterval(() => {
     const report = '[i] Hits -> '
