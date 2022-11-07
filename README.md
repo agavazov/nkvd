@@ -5,10 +5,14 @@ dynamically replicated using **full mesh** logic. Besides the main goal, several
 other features have been added to the project as **integration & stress tests**,
 and a pretty cool ✨ **Docker TCP Load Balancer** that automatically detects new containers
 
+---
+
 ### Database
 
 The database uses an in-memory storage adapter (other types can be added) accessible
 via an HTTP server, and a full-mesh network is used for replication.
+
+---
 
 ### Docker Load Balancer
 
@@ -19,14 +23,20 @@ This one is very useful if you want to have a dynamic load balancer that routes 
 and automatically detects the joining/connect or leaving/disconnect ofa container
 in a specific scale group.
 
+---
+
 ### Testing
 
 Well-organized integration tests covering all database scenarios and stress tests
 based on the powerful parallel execution of tasks in JavaScript.
 
+---
+
 ### Demo
 
-@todo
+[![gif](/docs/assets/demo.gif)](https://youtu.be/bsdi9aSfBoY)
+
+---
 
 ### How to start
 
@@ -58,6 +68,8 @@ Or you can use `docker compose`
 #### 5. Stress tests
 
 `docker compose run tests npm run stress`
+
+---
 
 ### Coverage
 
