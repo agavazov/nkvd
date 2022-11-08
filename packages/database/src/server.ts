@@ -1,4 +1,4 @@
-import * as dbHandlers from './db/http/handlerRegister';
+import * as dbHandlers from './db/http/handler-register';
 import { MemoryDb } from './db/memory-db';
 import { env } from './lib/env';
 import { Event, HttpServer } from './net/http';

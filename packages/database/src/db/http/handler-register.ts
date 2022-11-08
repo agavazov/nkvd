@@ -1,8 +1,8 @@
 export { clear } from './handlers/clear';
 export { get } from './handlers/get';
-export { getAll } from './handlers/getAll';
-export { getKeys } from './handlers/getKeys';
-export { getValues } from './handlers/getValues';
+export { getAll } from './handlers/get-all';
+export { getKeys } from './handlers/get-keys';
+export { getValues } from './handlers/get-values';
 export { healthcheck } from './handlers/healthcheck';
 export { is } from './handlers/is';
 export { rm } from './handlers/rm';

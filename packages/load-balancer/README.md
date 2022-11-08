@@ -4,7 +4,7 @@
 
 Simple TCP proxy written on NodeJS which can handle almost everything (based on `TCP` of course)
 
-### How to make ribbon balancer load balancer
+### How to make road ribbon load balancer
 
 ```typescript
 import { ErrorHandler, tcpProxy } from './net/tcp-proxy';
