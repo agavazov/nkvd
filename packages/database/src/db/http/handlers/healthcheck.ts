@@ -1,7 +1,7 @@
 import { RequestHandler } from '../../../net/http';
 
 /**
- * Check is the server return http code 200
+ * Check if the server returns HTTP code 200
  * @todo move this handler to different directory
  */
 export const healthcheck: RequestHandler = async () => {

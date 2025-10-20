@@ -1,5 +1,5 @@
 /**
- * Centralised object with all environment variables used in the project
+ * Centralized object with all environment variables used in the project
  */
 export const env = {
   dockerApiLocation: process.env.DOCKER_API_LOCATION || '/var/run/docker.sock',

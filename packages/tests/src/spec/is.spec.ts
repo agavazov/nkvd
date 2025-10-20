@@ -26,7 +26,7 @@ describe('/is command', () => {
       expect(response?.data?.success).to.be.equal(true);
     });
 
-    it('Should find the [same exists record] without error', async () => {
+    it('Should find the [same existing record] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 

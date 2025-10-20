@@ -3,10 +3,10 @@ import url from 'url';
 import { NkvDatabase } from '../db/nkv-database';
 
 /**
- * Structure of income params - For this project they
+ * Structure of incoming params - For this project they
  * are query requests so nothing special to think about
  */
-export type IncomeParams = NodeJS.Dict<string | string[]>
+export type IncomingParams = NodeJS.Dict<string | string[]>
 
 /**
  * How the callback function should look like,
@@ -15,7 +15,7 @@ export type IncomeParams = NodeJS.Dict<string | string[]>
  * and access to the main database adapter.
  */
 export type RequestHandler = <DB extends NkvDatabase>(
-  db: DB, data: IncomeParams
+  db: DB, data: IncomingParams
 ) => Promise<ResponseData> | ResponseData
 
 /**
@@ -24,7 +24,7 @@ export type RequestHandler = <DB extends NkvDatabase>(
  */
 export type ServerRequest = {
   path: string,
-  params: IncomeParams,
+  params: IncomingParams,
   res: ServerResponse
 }
 
@@ -91,7 +91,7 @@ type EventRecord = {
  *  >>>> Data: The error that caused this to happen
  *
  *  - RequestStart: When a new request arrives
- *  >>>> Data: Income parameters
+ *  >>>> Data: Incoming parameters
  *
  *  - RequestComplete: After the handler is ready, but before the response is sent to the client
  *  >>>> Data: Handler outcome data; Handler error
@@ -233,7 +233,7 @@ export class HttpServer<DB extends NkvDatabase> {
         try {
           eventRecord.listener.call(this, data);
         } catch (e) {
-          console.error(`There is a event listener [${event}] which trows an exception!`);
+          console.error(`There is an event listener [${event}] which throws an exception!`);
           throw e;
         }
       }

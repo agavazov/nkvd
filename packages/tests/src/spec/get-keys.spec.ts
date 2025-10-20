@@ -55,7 +55,7 @@ describe('/getKeys command', () => {
       }
     });
 
-    it('Should [get the SAME UNIQUE records keys] without error', async () => {
+    it('Should [get the SAME UNIQUE record keys] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 

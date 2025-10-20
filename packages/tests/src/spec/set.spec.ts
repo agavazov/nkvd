@@ -45,11 +45,11 @@ describe('/set command', () => {
     });
   });
 
-  describe('UTF16 successful record set', () => {
+  describe('UTF-16 successful record set', () => {
     const testKey = 'test:set:utf:✓';
     const testValue = '𤭢';
 
-    it('Should save [UTF8 key] and [UTF16 value] without error', async () => {
+    it('Should save [UTF-8 key] and [UTF-16 value] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 
@@ -69,7 +69,7 @@ describe('/set command', () => {
       expect(response?.data?.success).to.be.equal(true);
     });
 
-    it('Should get the [UTF16 value] by the [UTF8 key] without error', async () => {
+    it('Should get the [UTF-16 value] by the [UTF-8 key] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 

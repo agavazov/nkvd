@@ -25,7 +25,7 @@ type EventRecord = {
  *  - Connect: When a docker connection is established. This event will only happen once
  *  - Disconnect: When there is a problem communicating with the Docker API
  *  - ContainerConnect: Join only running container, `state` must be `running`
- *  - ContainerDisconnect: When a container have different `state' than `running'
+ *  - ContainerDisconnect: When a container has a different `state` than `running`
  */
 export enum Event {
   Connect,
@@ -96,17 +96,17 @@ export class InvalidResponseError extends Error {
 }
 
 /**
- * Docker observer that trigger events when something happens.
- * Connects via Linux Socket or http endpoint.
+ * Docker observer that triggers events when something happens.
+ * Connects via a Linux socket or HTTP endpoint.
  */
 export class DockerConnect {
-  // Docker api endpoint host
+  // Docker API endpoint host
   protected apiHost: string | undefined;
 
-  // Docker api endpoint port
+  // Docker API endpoint port
   protected apiPort: number | undefined;
 
-  // If the apiUrl is using https we have use different request method
+  // If the apiUrl is using HTTPS we have to use a different request method
   protected isHttps = false;
 
   // Linux socket location
@@ -125,7 +125,7 @@ export class DockerConnect {
   protected containersList: Container[] = [];
 
   constructor(
-    // Connection string (http url or linux socket path)
+    // Connection string (HTTP URL or Linux socket path)
     apiLocation: string,
     // Waiting time after each docker observer request
     protected observeIntervalMs: number = 500,
@@ -134,10 +134,10 @@ export class DockerConnect {
   ) {
     // Check if non-empty string information is passed
     if (!apiLocation.length) {
-      throw new ApiLocationError('Docker API location can`t be empty');
+      throw new ApiLocationError("Docker API location can't be empty");
     }
 
-    // When url (api endpoint) is provided
+    // When a URL (API endpoint) is provided
     if (/^http:\/\/|^https:\/\//.test(apiLocation)) {
       const urlParse = parse(apiLocation);
 
@@ -150,8 +150,8 @@ export class DockerConnect {
       this.isHttps = urlParse.protocol === 'https:';
       this.apiPort = Number(urlParse.port) || (this.isHttps ? 443 : 80);
     } else {
-      // If the provided api location is not URL then it must be linux socket file
-      // The 1st thing before we continue is to check is this file exists
+      // If the provided API location is not a URL then it must be a Linux socket file
+      // The first thing before we continue is to check if this file exists
       if (apiLocation && !existsSync(apiLocation)) {
         throw new ApiLocationError(`Socket file not found [${apiLocation}]`);
       }
@@ -160,7 +160,7 @@ export class DockerConnect {
     }
   }
 
-  // Connect to the docker api and check the docker service information
+  // Connect to the Docker API and check the Docker service information
   async connect(): Promise<void> {
     const rs = await this.request<DockerResponseInfo>('/info');
     // Check the response
@@ -168,7 +168,7 @@ export class DockerConnect {
       throw new ConnectionError('Unknown docker version!');
     }
 
-    // After connect check the minimal requirements
+    // After connecting, check the minimal requirements
     const currentVersion = Number(rs?.ServerVersion.split(/\./g)?.[0]);
     if (currentVersion < this.minDockerVersion) {
       throw new ConnectionError(`The minimum supported version is [${this.minDockerVersion}] `
@@ -178,7 +178,7 @@ export class DockerConnect {
     // Trigger the connection event
     this.emit(Event.Connect, rs);
 
-    // Start the events observer
+    // Start the event observer
     this.runDockerObserver();
   }
 
@@ -206,14 +206,14 @@ export class DockerConnect {
         try {
           eventRecord.listener.call(this, data);
         } catch (e) {
-          console.error(`There is a event listener [${event}] which trows an exception!`);
+          console.error(`There is an event listener [${event}] which throws an exception!`);
           throw e;
         }
       }
     });
   }
 
-  // HTTP Request method which works with linux socket or normal HTTP/S end-points
+  // HTTP request method which works with a Linux socket or normal HTTP/S endpoints
   // Expected response is JSON
   async request<T>(path: string): Promise<T> {
     return new Promise<T>((resolve, reject) => {
@@ -228,14 +228,14 @@ export class DockerConnect {
 
       // Make HTTP or HTTPS request
       const request = (this.isHttps ? https : http).request(options, (res) => {
-        // When there is an error the rejection will be calls
+        // When there is an error the rejection will be called
         res.on('error', err => reject(new RequestError(err.message)));
 
         // Collect the response
         let response = '';
         res.on('data', data => response += data);
 
-        // When request timeout reached
+        // When the request timeout is reached
         res.on('timeout', () => {
           reject(new RequestError(`Request timeout of [${this.requestTimeoutMs}]ms reached`));
 
@@ -265,9 +265,9 @@ export class DockerConnect {
     });
   }
 
-  // Observe for docker changes which act as separate process
+  // Observe for Docker changes which act as a separate process
   runDockerObserver(): void {
-    // Check is already started
+    // Check if it is already started
     if (this.isObserverStarted) {
       throw new Error('Docker observer is already started');
     }
@@ -279,7 +279,7 @@ export class DockerConnect {
     (async () => {
       while (this.isObserverStarted) {
         try {
-          // Get docker containers list
+          // Get the Docker containers list
           const containers = await this.request('/containers/json');
 
           // Validate the response data
@@ -302,14 +302,14 @@ export class DockerConnect {
             this.validateContainerData(item, index.toString());
           });
 
-          // Compare for added & removed records
+          // Compare for added and removed records
           const connected = rs.filter(r =>
             r.state === ContainerState.Running // Check only those which are running
-            && !this.containersList.find(c => c.id === r.id) // Not presented in current list
+            && !this.containersList.find(c => c.id === r.id) // Not present in the current list
           );
 
           const disconnected = this.containersList.filter(c =>
-            !rs.find(r => // Disconnected are all non-healthy or missing in from the current list
+            !rs.find(r => // Disconnected are all non-healthy or missing from the current list
               r.state === ContainerState.Running // Check only those which are running
               && r.id === c.id
             )

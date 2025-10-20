@@ -23,9 +23,9 @@ Expected output:
     Successful record set
       ✔ Should save [empty value] without error
       ✔ Should save [normal value] without error
-    UTF16 successful record set
-      ✔ Should save [UTF8 key] and [UTF16 value] without error
-      ✔ Should get the [UTF16 value] by the [UTF8 key] without error
+    UTF-16 successful record set
+      ✔ Should save [UTF-8 key] and [UTF-16 value] without error
+      ✔ Should get the [UTF-16 value] by the [UTF-8 key] without error
     Fail scenarios
       ✔ Should respond with an error for [missing key]
       ✔ Should respond with an error for [empty key]
@@ -54,10 +54,10 @@ Expected output:
       ✔ Should respond with an error for [empty key]
       ✔ Should respond with an error for [maximum key length] reached
 
-  /is command
-    Successful record exist check
-      ✔ Should save [normal record] without error
-      ✔ Should find the [same exists record] without error
+    /is command
+      Successful record exist check
+        ✔ Should save [normal record] without error
+        ✔ Should find the [same existing record] without error
       ✔ Should [remove the same record] without error
       ✔ Should not allow to remove the same record again with [missing record] error
     Fail scenarios
@@ -66,9 +66,9 @@ Expected output:
       ✔ Should respond with an error for [maximum key length] reached
 
   /clear command
-    Successful cleat all the records
+    Successful clear all the records
       ✔ Should save [normal record] without error
-      ✔ Should [get the some records] without error (121ms)
+      ✔ Should [get the same records] without error (121ms)
       ✔ Should [clear all records] without error
 
   /getKeys command
@@ -76,14 +76,14 @@ Expected output:
       ✔ Should [clear all records] without error
     Successful get all the keys
       ✔ Should save [TWICE 10 records] without error
-      ✔ Should [get the SAME UNIQUE records keys] without error
+      ✔ Should [get the SAME UNIQUE record keys] without error
 
   /getValues command
     Successful clear all the records
       ✔ Should [clear all records] without error
     Successful get all the values
       ✔ Should save [TWICE 10 records] without error
-      ✔ Should [get the SAME UNIQUE records values] without error
+      ✔ Should [get the SAME UNIQUE record values] without error
 
   /getAll command
     Successful clear all the records
@@ -141,7 +141,7 @@ Report:
 
 ### .env variables
 
-- `SERVICE_URL` The url of the service which will be tested
+- `SERVICE_URL` The URL of the service which will be tested
 - `STRESS_AMOUNT` Total amount of the requests to send
 - `STRESS_CLUSTERS` How many clusters will work in parallel
-- `STERSS_WORKERS` Haw many requests workers will work in parallel in each cluster
+- `STRESS_WORKERS` How many request workers will work in parallel in each cluster

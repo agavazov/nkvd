@@ -27,7 +27,7 @@ import { Mesh } from './net/mesh';
  * Dynamically append service that takes care of finding neighboring
  * nodes and parallel synchronization between them.
  * The basic principle is to check if other nodes are alive by providing
- * them with the available list of own nodes at each query аnd at the same time
+ * them with the available list of own nodes at each query and at the same time
  * it expects them to return their list of nodes
  * In this way, the network is automatically updated
  */
@@ -71,7 +71,7 @@ import { Mesh } from './net/mesh';
     // Get all records
     server.handle('/getAll', dbHandlers.getAll);
 
-    // Check is the server return http code 200
+    // Check if the server returns HTTP code 200
     server.handle('/healthcheck', dbHandlers.healthcheck);
 
     // Get server settings

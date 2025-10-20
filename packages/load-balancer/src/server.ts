@@ -3,11 +3,11 @@ import { Container, DockerConnect, Event } from './net/docker-connect';
 import { tcpProxy } from './net/tcp-proxy';
 
 /**
- * Dynamic TCP Load Balancer that through pull to docker
+ * Dynamic TCP Load Balancer that through polling Docker
  * requests discovers new or disconnected nodes
  *
  * This script combines `DockerConnect` and `tcpProxy`
- * via `Road Ribbon` switching nodes to handle incoming TCP requests
+ * via `round robin` switching nodes to handle incoming TCP requests
  */
 {
   // Connect to docker
@@ -41,7 +41,7 @@ function dockerEventHandler(connector: DockerConnect) {
   });
 
   connector.on(Event.ContainerConnect, (container) => {
-    console.log(`[+] А new container arrives [${JSON.stringify(container)}].`);
+    console.log(`[+] A new container arrives [${JSON.stringify(container)}].`);
   });
 
   connector.on(Event.ContainerDisconnect, (container) => {
@@ -64,7 +64,7 @@ function loadBalancerStart(connector: DockerConnect) {
   // The available containers that will serve TCP requests
   let containers: Container[] = [];
 
-  // Road ribbon balancer
+  // Round-robin balancer
   let rri = 0;
   const rriGenerator = () => {
     // When there is no available containers
@@ -72,7 +72,7 @@ function loadBalancerStart(connector: DockerConnect) {
       return false;
     }
 
-    // Road ribbon containers switch
+    // Round-robin container switch
     rri = ++rri >= containers.length ? 0 : rri;
     const container = containers[rri];
 

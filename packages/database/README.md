@@ -24,7 +24,7 @@ export class MemoryDb implements NkvDatabase {
 
 The HTTP server is simple, but perfectly covers the goals of the current service. It is based on events and dynamic
 registration of handlers. In this way, we can restore additional services without the need to interrupt the running
-services. Supports only GET requests with query params and returns only JSON response.
+services. It supports only GET requests with query parameters and returns only JSON responses.
 
 ### Commands
 
@@ -47,7 +47,7 @@ services. Supports only GET requests with query params and returns only JSON res
 The request lifecycle looks like this
 
 1. `Events.RequestStart` When a new request arrives.
-   `Data`: Income parameters
+   `Data`: Incoming parameters
 2. `Events.RequestComplete` After the handler is ready, but before the response is sent to the client.
    `Data`: Handler outcome data; Handler error; Server error (like 404)
 3. `Events.RequestEnd` After the execution of the request.
@@ -62,8 +62,8 @@ And the server events
 
 Dynamically append service that takes care of finding neighboring nodes and parallel
 synchronization between them. The basic principle is to check if other nodes are
-alive by providing them with the available list of own nodes at each query аnd at the
-same time it expects them to return their list of nodes In this way, the network is
+alive by providing them with the available list of own nodes at each query and at the
+same time it expects them to return their list of nodes. In this way, the network is
 automatically updated.
 
 ### Ping
@@ -77,14 +77,14 @@ But after the `ping` implementation, things change like this:
 
 ![svg](https://raw.githubusercontent.com/agavazov/nkvd/main/docs/assets/mesh-state-2.svg)
 
-When we run `ping` it pings all nodes in the current mesh network and inform them of the current (my)
-list of nodesSo they will automatically know about the available list of nodes and add them to
-their listAs we provide them with our list of nodes, they respond with theirsThis method is run
+When we run `ping` it pings all nodes in the current mesh network and informs them of the current list of nodes.
+They automatically learn about the available list of nodes and add them to their list.
+As we provide them with our list of nodes, they respond with theirs. This method is run
 at a specified interval.
 
 ### .env variables
 
 - `PORT` Service HTTP port
-- `HOSTNAME` NodeID - Must be unique per node (usually is provided by Dcoker or K8S)
+- `HOSTNAME` NodeID - Must be unique per node (usually is provided by Docker or K8S)
 - `MESH_NETWORK_URL` The url to join to the mesh (use the closest node or the load-balancer
   url, e.g. http://127.0.0.1:8080)
