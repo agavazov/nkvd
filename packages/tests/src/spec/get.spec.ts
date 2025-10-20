@@ -43,7 +43,7 @@ describe('/get command', () => {
 
       // Check response
       expect(response?.status).to.be.equal(200);
-      expect(response?.data).to.be.an('string');
+      expect(response?.data).to.be.a('string');
       expect(response?.data).to.be.equal(testValue);
     });
   });

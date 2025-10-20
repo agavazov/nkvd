@@ -55,7 +55,7 @@ describe('/getValues command', () => {
       }
     });
 
-    it('Should [get the SAME UNIQUE records values] without error', async () => {
+    it('Should [get the SAME UNIQUE record values] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 

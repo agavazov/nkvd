@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { RequestOptions } from 'node:https';
 import { parse } from 'url';
-import { IncomeParams } from './http';
+import { IncomingParams } from './http';
 
 /**
  * Structure of each node in the mesh network
@@ -20,7 +20,7 @@ export type MeshNode = {
 /**
  * It takes care of finding new nodes and replicating requests submitted to the current one
  * The basic principle is to check if other nodes are alive by providing
- * them with the available list of own nodes at each query аnd at the same time
+ * them with the available list of own nodes at each query and at the same time
  * it expects them to return their list of nodes
  * In this way, the network is automatically upgraded
  */
@@ -59,7 +59,7 @@ export class Mesh {
   }
 
   // Run parallel request to all nodes in the current mesh network
-  async replicate(path: string, params: IncomeParams): Promise<void> {
+  async replicate(path: string, params: IncomingParams): Promise<void> {
     // Check if the request which will be replicated comes from another replication
     if (params.noReplicate) {
       return;
@@ -89,7 +89,7 @@ export class Mesh {
       return;
     }
 
-    // SKip non unique nodes
+    // Skip non-unique nodes
     if (this.nodes.find(n => n.host === node.host && n.port === node.port)) {
       return;
     }
@@ -99,7 +99,7 @@ export class Mesh {
     this.nodes.push(node);
 
     // Show console info
-    console.log(`[+] New node join [${node.host}:${node.port}] from [${node.source}]`);
+    console.log(`[+] New node joined [${node.host}:${node.port}] from [${node.source}]`);
   }
 
   // Validate if the node data pass & is valid (usually it will be)

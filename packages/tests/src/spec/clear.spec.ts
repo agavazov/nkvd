@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { env } from '../lib/env';
 
 describe('/clear command', () => {
-  describe('Successful cleat all the records', () => {
+  describe('Successful clear all the records', () => {
     const testKey = 'test:clear:1';
 
     it('Should save [normal record] without error', async () => {
@@ -26,7 +26,7 @@ describe('/clear command', () => {
       expect(response?.data?.success).to.be.equal(true);
     });
 
-    it('Should [get the some records] without error', async () => {
+    it('Should [get the same records] without error', async () => {
       let response;
       let error: AxiosError<any> | undefined;
 

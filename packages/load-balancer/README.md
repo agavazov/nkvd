@@ -2,9 +2,9 @@
 
 ## TCP Proxy
 
-Simple TCP proxy written on NodeJS which can handle almost everything (based on `TCP` of course)
+Simple TCP proxy written on Node.js which can handle almost everything (based on `TCP` of course)
 
-### How to make road ribbon load balancer
+### How to make a round-robin load balancer
 
 ```typescript
 import { ErrorHandler, tcpProxy } from './net/tcp-proxy';
@@ -20,7 +20,7 @@ const errorHandler: ErrorHandler = (source, e) => {
   console.error(`${source}.error`, e.message);
 };
 
-// Road ribbon balancer
+// Round-robin balancer
 let rri = 0;
 const rriGenerator = () => {
   rri = ++rri >= containers.length ? 0 : rri;
@@ -34,7 +34,7 @@ tcpProxy(80, rriGenerator, errorHandler);
 
 ## Docker Connect
 
-This class will observe the docker server containers and inform you via events when something is changed
+This class will observe the Docker server containers and inform you via events when something changes
 
 ### How to listen for docker changes
 
@@ -54,7 +54,7 @@ connector.on(Event.Connect, (data) => {
 });
 
 connector.on(Event.ContainerConnect, (container) => {
-  console.log(`[+] А new container arrives [${JSON.stringify(container)}].`);
+  console.log(`[+] A new container arrives [${JSON.stringify(container)}].`);
 });
 
 connector.on(Event.ContainerDisconnect, (container) => {
@@ -62,8 +62,8 @@ connector.on(Event.ContainerDisconnect, (container) => {
 });
 ```
 
-You can listen HTTP end-point or Linux Socket. Keep in mind if you want to access
-the linux socket in a container you have to provide extra privileges and mount it.
+You can listen to an HTTP endpoint or a Linux socket. Keep in mind if you want to access
+the Linux socket in a container you have to provide extra privileges and mount it.
 
 ```yaml
 services:
@@ -77,7 +77,7 @@ services:
 
 ### .env variables
 
-- `DOCKER_API_LOCATION` Docker unix socket "/var/run/docker.sock" or Docker API URL "http://localhost"
+- `DOCKER_API_LOCATION` Docker Unix socket "/var/run/docker.sock" or Docker API URL "http://localhost"
 - `SERVICE_PORT` Broadcast/public load balancer port
-- `GROUP_PORT` Port of the container(s) which will receives the TCP request
-- `GROUP_NAME` Scalled group name (usually the name of the config in docker-compose.yaml)
+- `GROUP_PORT` Port of the container(s) which will receive the TCP request
+- `GROUP_NAME` Scaled group name (usually the name of the config in docker-compose.yaml)

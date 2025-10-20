@@ -21,9 +21,9 @@ describe('/status', () => {
       // Check response
       expect(response?.status).to.be.equal(200);
       expect(response?.data).to.be.an('object');
-      expect(response?.data?.maxKeyLength).to.be.an('number');
-      expect(response?.data?.maxValueLength).to.be.an('number');
-      expect(response?.data?.hostname).to.be.an('string');
+      expect(response?.data?.maxKeyLength).to.be.a('number');
+      expect(response?.data?.maxValueLength).to.be.a('number');
+      expect(response?.data?.hostname).to.be.a('string');
     });
   });
 });

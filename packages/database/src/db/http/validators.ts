@@ -1,8 +1,8 @@
-import { IncomeParams, InvalidInputResponse } from '../../net/http';
+import { IncomingParams, InvalidInputResponse } from '../../net/http';
 import { dbMaxKeyLength, dbMaxValueLength } from '../nkv-database';
 
 // Validate the query params for the requirements for the `k` param
-export function validateKey(params: IncomeParams) {
+export function validateKey(params: IncomingParams) {
   if (typeof params?.k === 'undefined') {
     throw new InvalidInputResponse('MISSING_KEY_PARAM');
   }
@@ -17,7 +17,7 @@ export function validateKey(params: IncomeParams) {
 }
 
 // Validate the query params for the requirements for the `v` param
-export function validateValue(params: IncomeParams) {
+export function validateValue(params: IncomingParams) {
   if (typeof params?.v === 'undefined') {
     throw new InvalidInputResponse('MISSING_VALUE_PARAM');
   }

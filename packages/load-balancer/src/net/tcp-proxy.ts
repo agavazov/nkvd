@@ -1,13 +1,13 @@
 import { Server, Socket } from 'node:net';
 
 /**
- * A skeleton of the callback function that will call before each incoming TCP request
+ * A skeleton of the callback function that will be called before each incoming TCP request
  * Usually must return `host` & `port`, but if no connections are available it may return `false`
  */
 export type SocketOptions = () => { host: string, port: number } | false
 
 /**
- * A skeleton of the callback function that will call when error appears
+ * A skeleton of the callback function that will be called when an error appears
  */
 export type ErrorHandler = (source: string, e: Error) => void;
 
@@ -30,7 +30,7 @@ export function tcpProxy(
     // Get host & port to connect to
     const connectionData = socketOptionsFn();
 
-    // If their nothing to connect the socket will be disconnected
+    // If there is nothing to connect to the socket will be disconnected
     if (connectionData === false) {
       socket.end();
 
@@ -46,12 +46,12 @@ export function tcpProxy(
     // Piping the data between a client and a TCP server
     socket.pipe(clientSocket).pipe(socket);
 
-    // Make sure the socket is closed destroyed on close
+    // Make sure the socket is destroyed on close
     socket.on('close', () => {
       socket.destroy();
     });
 
-    // Make sure the socket is closed destroyed on error
+    // Make sure the socket is destroyed on error
     socket.on('error', () => {
       socket.destroy();
     });

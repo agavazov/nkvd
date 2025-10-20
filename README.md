@@ -16,12 +16,8 @@ via an HTTP server, and a full-mesh network is used for replication.
 
 ### Docker Load Balancer
 
-This one is very usefull if you want to have a dynamic load balancer that routes TCP traffic and automatically detects
+This one is very useful if you want to have a dynamic load balancer that routes TCP traffic and automatically detects
 the appearance or disappearance of a container in a specific scale group.
-
-This one is very useful if you want to have a dynamic load balancer that routes TCP traffic
-and automatically detects the joining/connect or leaving/disconnect ofa container
-in a specific scale group.
 
 ---
 
@@ -42,7 +38,7 @@ based on the powerful parallel execution of tasks in JavaScript.
 
 ### How to start
 
-The project is 100% based on NodeJs and TypeScript
+The project is 100% based on Node.js and TypeScript
 and each package is prepared to work with Docker.
 
 You can build, run and test the project via `NPM` because **all actions are described** in
@@ -149,7 +145,7 @@ services. Supports only GET requests with query params and returns only JSON res
 The request lifecycle looks like this
 
 1. `Events.RequestStart` When a new request arrives.
-   `Data`: Income parameters
+   `Data`: Incoming parameters
 2. `Events.RequestComplete` After the handler is ready, but before the response is sent to the client.
    `Data`: Handler outcome data; Handler error; Server error (like 404)
 3. `Events.RequestEnd` After the execution of the request.
@@ -164,8 +160,8 @@ And the server events
 
 Dynamically append service that takes care of finding neighboring nodes and parallel
 synchronization between them. The basic principle is to check if other nodes are
-alive by providing them with the available list of own nodes at each query аnd at the
-same time it expects them to return their list of nodes In this way, the network is
+alive by providing them with the available list of own nodes at each query and at the
+same time it expects them to return their list of nodes. In this way, the network is
 automatically updated.
 
 ### Ping
@@ -179,15 +175,15 @@ But after the `ping` implementation, things change like this:
 
 ![svg](https://raw.githubusercontent.com/agavazov/nkvd/main/docs/assets/mesh-state-2.svg)
 
-When we run `ping` it pings all nodes in the current mesh network and inform them of the current (my)
-list of nodesSo they will automatically know about the available list of nodes and add them to
-their listAs we provide them with our list of nodes, they respond with theirsThis method is run
+When we run `ping` it pings all nodes in the current mesh network and informs them of the current list of nodes.
+They will automatically know about the available list of nodes and add them to their list.
+As we provide them with our list of nodes, they respond with theirs. This method is run
 at a specified interval.
 
 ### .env variables
 
 - `PORT` Service HTTP port
-- `HOSTNAME` NodeID - Must be unique per node (usually is provided by Dcoker or K8S)
+- `HOSTNAME` NodeID - Must be unique per node (usually is provided by Docker or K8S)
 - `MESH_NETWORK_URL` The url to join to the mesh (use the closest node or the load-balancer
   url, e.g. http://127.0.0.1:8080)
 
@@ -197,9 +193,9 @@ at a specified interval.
 
 ## TCP Proxy
 
-Simple TCP proxy written on NodeJS which can handle almost everything (based on `TCP` of course)
+Simple TCP proxy written on Node.js which can handle almost everything (based on `TCP` of course)
 
-### How to make road ribbon load balancer
+### How to make a round-robin load balancer
 
 ```typescript
 import { ErrorHandler, tcpProxy } from './net/tcp-proxy';
@@ -215,7 +211,7 @@ const errorHandler: ErrorHandler = (source, e) => {
   console.error(`${source}.error`, e.message);
 };
 
-// Road ribbon balancer
+// Round-robin balancer
 let rri = 0;
 const rriGenerator = () => {
   rri = ++rri >= containers.length ? 0 : rri;
@@ -229,7 +225,7 @@ tcpProxy(80, rriGenerator, errorHandler);
 
 ## Docker Connect
 
-This class will observe the docker server containers and inform you via events when something is changed
+This class will observe the Docker server containers and inform you via events when something changes
 
 ### How to listen for docker changes
 
@@ -249,7 +245,7 @@ connector.on(Event.Connect, (data) => {
 });
 
 connector.on(Event.ContainerConnect, (container) => {
-  console.log(`[+] А new container arrives [${JSON.stringify(container)}].`);
+  console.log(`[+] A new container arrives [${JSON.stringify(container)}].`);
 });
 
 connector.on(Event.ContainerDisconnect, (container) => {
@@ -257,8 +253,8 @@ connector.on(Event.ContainerDisconnect, (container) => {
 });
 ```
 
-You can listen HTTP end-point or Linux Socket. Keep in mind if you want to access
-the linux socket in a container you have to provide extra privileges and mount it.
+You can listen to an HTTP endpoint or a Linux socket. Keep in mind if you want to access
+the Linux socket in a container you have to provide extra privileges and mount it.
 
 ```yaml
 services:
@@ -274,8 +270,8 @@ services:
 
 - `DOCKER_API_LOCATION` Docker unix socket "/var/run/docker.sock" or Docker API URL "http://localhost"
 - `SERVICE_PORT` Broadcast/public load balancer port
-- `GROUP_PORT` Port of the container(s) which will receives the TCP request
-- `GROUP_NAME` Scalled group name (usually the name of the config in docker-compose.yaml)
+- `GROUP_PORT` Port of the container(s) which will receive the TCP request
+- `GROUP_NAME` Scaled group name (usually the name of the config in docker-compose.yaml)
 
 ---
 
@@ -304,9 +300,9 @@ Expected output:
     Successful record set
       ✔ Should save [empty value] without error
       ✔ Should save [normal value] without error
-    UTF16 successful record set
-      ✔ Should save [UTF8 key] and [UTF16 value] without error
-      ✔ Should get the [UTF16 value] by the [UTF8 key] without error
+      UTF-16 successful record set
+        ✔ Should save [UTF-8 key] and [UTF-16 value] without error
+        ✔ Should get the [UTF-16 value] by the [UTF-8 key] without error
     Fail scenarios
       ✔ Should respond with an error for [missing key]
       ✔ Should respond with an error for [empty key]
@@ -338,7 +334,7 @@ Expected output:
   /is command
     Successful record exist check
       ✔ Should save [normal record] without error
-      ✔ Should find the [same exists record] without error
+      ✔ Should find the [same existing record] without error
       ✔ Should [remove the same record] without error
       ✔ Should not allow to remove the same record again with [missing record] error
     Fail scenarios
@@ -346,10 +342,10 @@ Expected output:
       ✔ Should respond with an error for [empty key]
       ✔ Should respond with an error for [maximum key length] reached
 
-  /clear command
-    Successful cleat all the records
+    /clear command
+      Successful clear all the records
       ✔ Should save [normal record] without error
-      ✔ Should [get the some records] without error (121ms)
+      ✔ Should [get the same records] without error (121ms)
       ✔ Should [clear all records] without error
 
   /getKeys command
@@ -357,14 +353,14 @@ Expected output:
       ✔ Should [clear all records] without error
     Successful get all the keys
       ✔ Should save [TWICE 10 records] without error
-      ✔ Should [get the SAME UNIQUE records keys] without error
+      ✔ Should [get the SAME UNIQUE record keys] without error
 
   /getValues command
     Successful clear all the records
       ✔ Should [clear all records] without error
     Successful get all the values
       ✔ Should save [TWICE 10 records] without error
-      ✔ Should [get the SAME UNIQUE records values] without error
+      ✔ Should [get the SAME UNIQUE record values] without error
 
   /getAll command
     Successful clear all the records
@@ -422,7 +418,7 @@ Report:
 
 ### .env variables
 
-- `SERVICE_URL` The url of the service which will be tested
+- `SERVICE_URL` The URL of the service which will be tested
 - `STRESS_AMOUNT` Total amount of the requests to send
 - `STRESS_CLUSTERS` How many clusters will work in parallel
-- `STERSS_WORKERS` Haw many requests workers will work in parallel in each cluster
+- `STRESS_WORKERS` How many request workers will work in parallel in each cluster
